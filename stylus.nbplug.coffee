@@ -24,7 +24,7 @@ class StylusPlugin
     target: null
     targets: []
     includes: []
-    outputDir: null
+    outdir: null
     compress: no
     filter: null
     fileExts: [ 'styl', 'stylus' ]
@@ -50,7 +50,7 @@ class StylusPlugin
         .on 'file', (file, dir, base) => 
           return unless @filter.test(file)
           infile = join(base, dir, file)
-          outdir = join(@opt.outputDir ? base, dir)
+          outdir = join(@opt.outdir ? base, dir)
           outfile = join(outdir, setExt(file, '.css'))
           makeDir(outdir)
           @_compile(infile, outfile)

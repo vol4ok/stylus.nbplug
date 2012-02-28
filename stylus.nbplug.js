@@ -34,7 +34,7 @@ StylusPlugin = (function() {
     target: null,
     targets: [],
     includes: [],
-    outputDir: null,
+    outdir: null,
     compress: false,
     filter: null,
     fileExts: ['styl', 'stylus']
@@ -72,7 +72,7 @@ StylusPlugin = (function() {
         var infile, outdir, outfile, _ref5;
         if (!_this.filter.test(file)) return;
         infile = join(base, dir, file);
-        outdir = join((_ref5 = _this.opt.outputDir) != null ? _ref5 : base, dir);
+        outdir = join((_ref5 = _this.opt.outdir) != null ? _ref5 : base, dir);
         outfile = join(outdir, setExt(file, '.css'));
         makeDir(outdir);
         return _this._compile(infile, outfile);
