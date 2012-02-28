@@ -5,7 +5,7 @@ description: "stylus.nbplug"
 version: "0.0.1"
 main: "stylus.nbplug.js"
 repository: 
-  url: ""
+  url: "git://github.com/vol4ok/stylus.bnplug.git"
 engines: 
   node: "~0.6.11"
 dependencies:
