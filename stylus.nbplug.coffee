@@ -21,10 +21,9 @@ exports.initialize = (builder) -> new StylusPlugin(builder)
 
 class StylusPlugin
   defaults:
-    target: null
-    targets: []
+    src: []
+    dst: null
     includes: []
-    outdir: null
     compress: no
     filter: null
     fileExts: [ 'styl', 'stylus' ]
@@ -35,7 +34,7 @@ class StylusPlugin
   stylus: (name, options) ->
     @opt = _.defaults(options, @defaults)
     @opt.includes = _.map @opt.includes, (inc) -> fs.realpathSync(inc) 
-    @opt.targets.push(@opt.target) if @opt.target?
+    @opt.src = [ @opt.src ] unless _.isArray(@opt.src)
             
     @filter = new Filter().allow('ext', @opt.fileExts...)
     if @opt.filter?
@@ -45,12 +44,12 @@ class StylusPlugin
     
     @asyncOps = 1
     @builder.lock()
-    for target in @opt.targets
+    for target in @opt.src
       walkSync()
         .on 'file', (file, dir, base) => 
           return unless @filter.test(file)
           infile = join(base, dir, file)
-          outdir = join(@opt.outdir ? base, dir)
+          outdir = join(@opt.dst ? base, dir)
           outfile = join(outdir, setExt(file, '.css'))
           makeDir(outdir)
           @_compile(infile, outfile)

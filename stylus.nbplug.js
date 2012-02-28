@@ -31,10 +31,9 @@ exports.initialize = function(builder) {
 StylusPlugin = (function() {
 
   StylusPlugin.prototype.defaults = {
-    target: null,
-    targets: [],
+    src: [],
+    dst: null,
     includes: [],
-    outdir: null,
     compress: false,
     filter: null,
     fileExts: ['styl', 'stylus']
@@ -52,7 +51,7 @@ StylusPlugin = (function() {
     this.opt.includes = _.map(this.opt.includes, function(inc) {
       return fs.realpathSync(inc);
     });
-    if (this.opt.target != null) this.opt.targets.push(this.opt.target);
+    if (!_.isArray(this.opt.src)) this.opt.src = [this.opt.src];
     this.filter = (_ref3 = new Filter()).allow.apply(_ref3, ['ext'].concat(__slice.call(this.opt.fileExts)));
     if (this.opt.filter != null) {
       if (_.isArray(this.opt.filter.allow)) {
@@ -65,14 +64,14 @@ StylusPlugin = (function() {
     this.count = 0;
     this.asyncOps = 1;
     this.builder.lock();
-    _ref4 = this.opt.targets;
+    _ref4 = this.opt.src;
     for (_i = 0, _len = _ref4.length; _i < _len; _i++) {
       target = _ref4[_i];
       walkSync().on('file', function(file, dir, base) {
         var infile, outdir, outfile, _ref5;
         if (!_this.filter.test(file)) return;
         infile = join(base, dir, file);
-        outdir = join((_ref5 = _this.opt.outdir) != null ? _ref5 : base, dir);
+        outdir = join((_ref5 = _this.opt.dst) != null ? _ref5 : base, dir);
         outfile = join(outdir, setExt(file, '.css'));
         makeDir(outdir);
         return _this._compile(infile, outfile);
